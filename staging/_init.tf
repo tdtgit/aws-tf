@@ -1,6 +1,6 @@
 # Configure the AWS Provider
 provider "aws" {
-  region = "ap-southeast-1"
+  region = var.region
   shared_credentials_file = "../.secret/staging_keys"
 }
 

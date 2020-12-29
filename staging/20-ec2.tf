@@ -6,6 +6,7 @@ resource "aws_instance" "tf_ec2_app1" {
 
   tags = {
     Name = "${var.app_name}-App1"
+    Environment = var.environment
   }
 }
 
@@ -22,6 +23,7 @@ resource "aws_instance" "tf_ec2_app2" {
 
   tags = {
     Name = "${var.app_name}-App2"
+    Environment = var.environment
   }
 }
 

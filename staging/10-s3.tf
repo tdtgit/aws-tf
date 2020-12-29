@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "tf-app" {
   acl    = "private"
 
   tags = {
-    Name        = "For ${var.app_name} App"
+    Name        = "S3 storage ${var.app_name} App"
     Environment = "Dev"
   }
 }
