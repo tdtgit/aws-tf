@@ -4,8 +4,8 @@ resource "aws_s3_bucket" "tf-s3" {
   force_destroy = true
 
   tags = {
-    name        = "For ${var.app_name} ELB Logging"
-    environment = var.environment
+    Name        = "For ${var.app_name} ELB Logging"
+    Environment = var.environment
   }
 }
 
