@@ -1,11 +1,11 @@
 resource "aws_s3_bucket" "tf-s3" {
-  bucket = "for-${lower(var.app_name)}-app"
-  acl    = "private"
+  bucket        = "for-${lower(var.app_name)}-app"
+  acl           = "private"
   force_destroy = true
 
   tags = {
-    name        = "For ${var.app_name} App"
-    environment = "Dev"
+    name        = "For ${var.app_name} ELB Logging"
+    environment = var.environment
   }
 }
 
