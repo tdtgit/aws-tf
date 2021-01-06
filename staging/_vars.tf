@@ -3,14 +3,9 @@ variable "app_name" {
   default = "DAT"
 }
 
-variable "environment" {
+variable "aws_region" {
   type    = string
-  default = "dev"
-}
-
-variable "region" {
-  type    = string
-  default = "ap-southeast-1"
+  default = "us-east-1"
 }
 
 variable "ec2_app_size" {
@@ -21,4 +16,9 @@ variable "ec2_app_size" {
 variable "ec2_db_size" {
   type    = string
   default = "t2.nano"
+}
+
+variable "s3_prefix" {
+  type    = string
+  default = "LB"
 }
