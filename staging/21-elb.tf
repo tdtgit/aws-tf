@@ -47,14 +47,9 @@ resource "aws_lb_listener" "tf-app-elb-listener" {
 }
 
 resource "aws_lb_target_group_attachment" "tf-app-elb-tg-target-app1" {
+  count            = length(aws_instance.tf_ec2_app)
   target_group_arn = aws_lb_target_group.tf-app-elb-tg.arn
-  target_id        = aws_instance.tf_ec2_app1.id
-  port             = 80
-}
-
-resource "aws_lb_target_group_attachment" "tf-elb-tg-target-app2" {
-  target_group_arn = aws_lb_target_group.tf-app-elb-tg.arn
-  target_id        = aws_instance.tf_ec2_app2.id
+  target_id        = aws_instance.tf_ec2_app[count.index].id
   port             = 80
 }
 
@@ -106,14 +101,9 @@ resource "aws_lb_listener" "tf-web-elb-listener" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "tf-web-elb-tg-target-app1" {
+resource "aws_lb_target_group_attachment" "tf-web-elb-tg-target-app" {
+  count            = length(aws_instance.tf_ec2_app)
   target_group_arn = aws_lb_target_group.tf-web-elb-tg.arn
-  target_id        = aws_instance.tf_ec2_web1.id
-  port             = 80
-}
-
-resource "aws_lb_target_group_attachment" "tf-web-elb-tg-target-app2" {
-  target_group_arn = aws_lb_target_group.tf-web-elb-tg.arn
-  target_id        = aws_instance.tf_ec2_web2.id
+  target_id        = aws_instance.tf_ec2_web[count.index].id
   port             = 80
 }
