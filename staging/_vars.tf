@@ -23,9 +23,14 @@ variable "rds_db_size" {
   default = "t2.micro"
 }
 
-variable "s3_prefix" {
+variable "lb_public_s3_prefix" {
   type    = string
-  default = "LB"
+  default = "PublicLBLogs"
+}
+
+variable "lb_private_s3_prefix" {
+  type    = string
+  default = "PrivateLBLogs"
 }
 
 variable "vpc_subnet_prefix" {
