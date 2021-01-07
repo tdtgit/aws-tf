@@ -1,7 +1,7 @@
 # App
 resource "aws_instance" "tf_ec2_app1" {
   ami             = data.aws_ami.ubuntu2004lts.id
-  instance_type   = var.ec2_app_size
+  instance_type   = var.sizing.ec2_app
   subnet_id       = aws_subnet.tf_vpc_sub_a1.id
   key_name        = aws_key_pair.SSH.key_name
   security_groups = [
@@ -26,7 +26,7 @@ resource "aws_eip" "app1" {
 
 resource "aws_instance" "tf_ec2_app2" {
   ami             = data.aws_ami.ubuntu2004lts.id
-  instance_type   = var.ec2_app_size
+  instance_type   = var.sizing.ec2_app
   subnet_id       = aws_subnet.tf_vpc_sub_a2.id
   key_name        = aws_key_pair.SSH.key_name
   security_groups = [
@@ -52,7 +52,7 @@ resource "aws_eip" "app2" {
 # Web
 resource "aws_instance" "tf_ec2_web1" {
   ami             = data.aws_ami.ubuntu2004lts.id
-  instance_type   = var.ec2_app_size
+  instance_type   = var.sizing.ec2_web
   subnet_id       = aws_subnet.tf_vpc_sub_c1.id
   key_name        = aws_key_pair.SSH.key_name
   security_groups = [
@@ -77,7 +77,7 @@ resource "aws_eip" "web1" {
 
 resource "aws_instance" "tf_ec2_web2" {
   ami             = data.aws_ami.ubuntu2004lts.id
-  instance_type   = var.ec2_app_size
+  instance_type   = var.sizing.ec2_web
   subnet_id       = aws_subnet.tf_vpc_sub_c2.id
   key_name        = aws_key_pair.SSH.key_name
   security_groups = [

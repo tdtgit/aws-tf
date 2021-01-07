@@ -13,7 +13,7 @@ resource "aws_lb" "tf-app-elb" {
 
   access_logs {
     bucket  = aws_s3_bucket.tf-s3.bucket
-    prefix  = var.lb_private_s3_prefix
+    prefix  = var.elb_log_prefix.private
     enabled = true
   }
 
@@ -73,7 +73,7 @@ resource "aws_lb" "tf-web-elb" {
 
   access_logs {
     bucket  = aws_s3_bucket.tf-s3.bucket
-    prefix  = var.lb_public_s3_prefix
+    prefix  = var.elb_log_prefix.public
     enabled = true
   }
 

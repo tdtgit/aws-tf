@@ -3,7 +3,7 @@ resource "aws_db_instance" "tf_db" {
   storage_type         = "gp2"
   engine               = "mysql"
   engine_version       = "5.7"
-  instance_class       = "db.${var.rds_db_size}"
+  instance_class       = "db.${var.sizing.rds_master}"
   identifier           = "${lower(var.app_name)}-${lower(var.rds_config.database)}-${lower(random_string.rand_db_name.result)}"
   name                 = var.rds_config.database
   username             = var.rds_config.username

@@ -13,24 +13,30 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-variable "ec2_app_size" {
-  type    = string
-  default = "t2.nano"
+variable "sizing" {
+  type = object({
+    ec2_app = string
+    ec2_web = string
+    rds_master = string
+    rds_read = string
+  })
+  default = {
+    ec2_app = "t2.nano"
+    ec2_web = "t2.nano"
+    rds_master = "t2.micro"
+    rds_read = "t2.micro"
+  }
 }
 
-variable "rds_db_size" {
-  type    = string
-  default = "t2.micro"
-}
-
-variable "lb_public_s3_prefix" {
-  type    = string
-  default = "PublicLBLogs"
-}
-
-variable "lb_private_s3_prefix" {
-  type    = string
-  default = "PrivateLBLogs"
+variable "elb_log_prefix" {
+  type = object({
+    public = string
+    private = string
+  })
+  default = {
+    public = "PublicLBLogs"
+    private = "PrivateLBLogs"
+  }
 }
 
 variable "vpc_subnet_prefix" {
