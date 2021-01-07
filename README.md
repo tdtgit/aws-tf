@@ -6,7 +6,7 @@ This project is my first Terraform project, please contribute if you see any iss
 - [x] 1 RDS instance
 - [x] 2 public/private ALB with access logs to S3 bucket
 
-All of above come with auto created VPC with 3 subnets for web, app and database (3-tier architecture), secured and ready-to-use security groups.
+All of the above come with auto created VPC with 3 subnets for web, app, and database (3-tier architecture), secured and ready-to-use security groups.
 
 ### 🔖 How to use it
 1. Create a secret file named `/.secret/staging_keys` or `/.secret/production_keys` with AWS access key information:

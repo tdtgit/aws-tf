@@ -56,7 +56,7 @@ resource "aws_instance" "tf_ec2_web1" {
   subnet_id       = aws_subnet.tf_vpc_sub_c1.id
   key_name        = aws_key_pair.SSH.key_name
   security_groups = [
-    aws_security_group.tf-app-sg.id
+    aws_security_group.tf-web-sg.id
   ]
 
   tags = {
@@ -81,7 +81,7 @@ resource "aws_instance" "tf_ec2_web2" {
   subnet_id       = aws_subnet.tf_vpc_sub_c2.id
   key_name        = aws_key_pair.SSH.key_name
   security_groups = [
-    aws_security_group.tf-app-sg.id
+    aws_security_group.tf-web-sg.id
   ]
 
   tags = {
