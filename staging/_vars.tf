@@ -1,6 +1,6 @@
 variable "app_name" {
   type    = string
-  default = "DAT"
+  default = "myproject"
 }
 
 variable "environment" {
@@ -21,10 +21,10 @@ variable "sizing" {
     rds_read = string
   })
   default = {
-    ec2_app = "t2.nano"
-    ec2_web = "t2.nano"
-    rds_master = "t2.micro"
-    rds_read = "t2.micro"
+    ec2_app = "t4g.nano"
+    ec2_web = "t4g.nano"
+    rds_master = "t4g.micro"
+    rds_read = "t4g.micro"
   }
 }
 

@@ -1,7 +1,7 @@
-resource "aws_security_group" "tf-elb-web-sg" {
-  name        = "${var.app_name}-SG-Web-ELB"
+resource "aws_security_group" "web-elb-sg" {
+  name        = "${var.app_name}-web-elb-sg"
   description = "Allow global inbound traffic"
-  vpc_id      = aws_vpc.tf_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     description = "HTTP"
@@ -43,15 +43,15 @@ resource "aws_security_group" "tf-elb-web-sg" {
   }
 
   tags = {
-    Name        = "${var.app_name}-SG-WEB-ELB"
+    Name        = "${var.app_name}-web-elb-sg"
     Environment = var.environment
   }
 }
 
-resource "aws_security_group" "tf-web-sg" {
-  name        = "${var.app_name}-SG-WEB"
+resource "aws_security_group" "web-sg" {
+  name        = "${var.app_name}-web-sg"
   description = "Allow ELB inbound traffic"
-  vpc_id      = aws_vpc.tf_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     description     = "HTTP"
@@ -59,7 +59,7 @@ resource "aws_security_group" "tf-web-sg" {
     to_port         = 80
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.tf-elb-web-sg.id
+      aws_security_group.elb-web-sg.id
     ]
   }
 
@@ -69,7 +69,7 @@ resource "aws_security_group" "tf-web-sg" {
     to_port         = 443
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.tf-elb-web-sg.id
+      aws_security_group.elb-web-sg.id
     ]
   }
 
@@ -88,10 +88,10 @@ resource "aws_security_group" "tf-web-sg" {
   }
 }
 
-resource "aws_security_group" "tf-elb-app-sg" {
-  name        = "${var.app_name}-SG-APP-ELB"
+resource "aws_security_group" "app-elb-sg" {
+  name        = "${var.app_name}-app-elb-sg"
   description = "Allow inbound traffic from Web instances"
-  vpc_id      = aws_vpc.tf_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     description = "HTTP"
@@ -99,7 +99,7 @@ resource "aws_security_group" "tf-elb-app-sg" {
     to_port     = 80
     protocol    = "tcp"
     security_groups = [
-      aws_security_group.tf-web-sg.id
+      aws_security_group.web-sg.id
     ]
   }
 
@@ -109,7 +109,7 @@ resource "aws_security_group" "tf-elb-app-sg" {
     to_port     = 443
     protocol    = "tcp"
     security_groups = [
-      aws_security_group.tf-web-sg.id
+      aws_security_group.web-sg.id
     ]
   }
 
@@ -123,15 +123,15 @@ resource "aws_security_group" "tf-elb-app-sg" {
   }
 
   tags = {
-    Name        = "${var.app_name}-SG-APP-ELB"
+    Name        = "${var.app_name}-app-elb-sg"
     Environment = var.environment
   }
 }
 
-resource "aws_security_group" "tf-app-sg" {
-  name        = "${var.app_name}-SG-APP"
+resource "aws_security_group" "app-sg" {
+  name        = "${var.app_name}-app-sg"
   description = "Allow inbound traffic from Web instances"
-  vpc_id      = aws_vpc.tf_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     description     = "HTTP"
@@ -139,7 +139,7 @@ resource "aws_security_group" "tf-app-sg" {
     to_port         = 80
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.tf-elb-app-sg.id
+      aws_security_group.elb-app-sg.id
     ]
   }
 
@@ -149,7 +149,7 @@ resource "aws_security_group" "tf-app-sg" {
     to_port         = 443
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.tf-elb-app-sg.id
+      aws_security_group.elb-app-sg.id
     ]
   }
 
@@ -163,15 +163,15 @@ resource "aws_security_group" "tf-app-sg" {
   }
 
   tags = {
-    Name        = "${var.app_name}-SG-APP"
+    Name        = "${var.app_name}-app-sg"
     Environment = var.environment
   }
 }
 
-resource "aws_security_group" "tf-db-sg" {
-  name        = "${var.app_name}-SG-DB"
+resource "aws_security_group" "db-sg" {
+  name        = "${var.app_name}-db-sg"
   description = "Allow traffic from APP"
-  vpc_id      = aws_vpc.tf_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     description     = "MySQL"
@@ -179,7 +179,7 @@ resource "aws_security_group" "tf-db-sg" {
     to_port         = 3306
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.tf-app-sg.id
+      aws_security_group.app-sg.id
     ]
   }
 
@@ -193,7 +193,7 @@ resource "aws_security_group" "tf-db-sg" {
   }
 
   tags = {
-    Name        = "${var.app_name}-SG-DB"
+    Name        = "${var.app_name}-db-sg"
     Environment = var.environment
   }
 }
