@@ -1,7 +1,7 @@
-resource "aws_security_group" "web-elb-sg" {
+resource "aws_security_group" "web_elb_sg" {
   name        = "${var.app_name}-web-elb-sg"
   description = "Allow global inbound traffic"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
     description = "HTTP"
@@ -48,10 +48,10 @@ resource "aws_security_group" "web-elb-sg" {
   }
 }
 
-resource "aws_security_group" "web-sg" {
+resource "aws_security_group" "web_sg" {
   name        = "${var.app_name}-web-sg"
   description = "Allow ELB inbound traffic"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
     description     = "HTTP"
@@ -59,7 +59,7 @@ resource "aws_security_group" "web-sg" {
     to_port         = 80
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.elb-web-sg.id
+      aws_security_group.web_elb_sg.id
     ]
   }
 
@@ -69,7 +69,7 @@ resource "aws_security_group" "web-sg" {
     to_port         = 443
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.elb-web-sg.id
+      aws_security_group.web_elb_sg.id
     ]
   }
 
@@ -83,15 +83,15 @@ resource "aws_security_group" "web-sg" {
   }
 
   tags = {
-    Name        = "${var.app_name}-SG-WEB"
+    Name        = "${var.app_name}-web-sg"
     Environment = var.environment
   }
 }
 
-resource "aws_security_group" "app-elb-sg" {
+resource "aws_security_group" "app_elb_sg" {
   name        = "${var.app_name}-app-elb-sg"
   description = "Allow inbound traffic from Web instances"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
     description = "HTTP"
@@ -99,7 +99,7 @@ resource "aws_security_group" "app-elb-sg" {
     to_port     = 80
     protocol    = "tcp"
     security_groups = [
-      aws_security_group.web-sg.id
+      aws_security_group.web_sg.id
     ]
   }
 
@@ -109,7 +109,7 @@ resource "aws_security_group" "app-elb-sg" {
     to_port     = 443
     protocol    = "tcp"
     security_groups = [
-      aws_security_group.web-sg.id
+      aws_security_group.web_sg.id
     ]
   }
 
@@ -128,10 +128,10 @@ resource "aws_security_group" "app-elb-sg" {
   }
 }
 
-resource "aws_security_group" "app-sg" {
+resource "aws_security_group" "app_sg" {
   name        = "${var.app_name}-app-sg"
   description = "Allow inbound traffic from Web instances"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
     description     = "HTTP"
@@ -139,7 +139,7 @@ resource "aws_security_group" "app-sg" {
     to_port         = 80
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.elb-app-sg.id
+      aws_security_group.app_elb_sg.id
     ]
   }
 
@@ -149,7 +149,7 @@ resource "aws_security_group" "app-sg" {
     to_port         = 443
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.elb-app-sg.id
+      aws_security_group.app_elb_sg.id
     ]
   }
 
@@ -168,10 +168,10 @@ resource "aws_security_group" "app-sg" {
   }
 }
 
-resource "aws_security_group" "db-sg" {
+resource "aws_security_group" "db_sg" {
   name        = "${var.app_name}-db-sg"
   description = "Allow traffic from APP"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
     description     = "MySQL"
@@ -179,7 +179,7 @@ resource "aws_security_group" "db-sg" {
     to_port         = 3306
     protocol        = "tcp"
     security_groups = [
-      aws_security_group.app-sg.id
+      aws_security_group.app_sg.id
     ]
   }
 

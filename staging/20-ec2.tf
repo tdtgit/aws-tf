@@ -1,33 +1,34 @@
+
 # App
-resource "aws_instance" "tf_ec2_app" {
-  count           = 4
-  ami             = "ami-0dffcf3c26d79e0bb"
-  instance_type   = var.sizing.ec2_app
-  subnet_id       = aws_subnet.tf_vpc_sub_a1.id
-  key_name        = aws_key_pair.SSH.key_name
+resource "aws_instance" "app_ec2" {
+  count           = 2
+  ami             = data.aws_ami.app_ami.id
+  instance_type   = var.sizing.app_ec2
+  subnet_id       = aws_subnet.app_1a.id
+  key_name        = aws_key_pair.ssh.key_name
   security_groups = [
-    aws_security_group.tf-app-sg.id
+    aws_security_group.app_sg.id
   ]
 
   tags = {
-    Name        = "${var.app_name}-App-${count.index + 1}"
+    Name        = "${var.app_name}_app_${count.index + 1}"
     Environment = var.environment
   }
 }
 
 # Web
-resource "aws_instance" "tf_ec2_web" {
-  count           = 4
-  ami             = "ami-0dffcf3c26d79e0bb"
-  instance_type   = var.sizing.ec2_web
-  subnet_id       = aws_subnet.tf_vpc_sub_c1.id
-  key_name        = aws_key_pair.SSH.key_name
+resource "aws_instance" "web_ec2" {
+  count           = 2
+  ami             = data.aws_ami.app_ami.id
+  instance_type   = var.sizing.web_ec2
+  subnet_id       = aws_subnet.web_1a.id
+  key_name        = aws_key_pair.ssh.key_name
   security_groups = [
-    aws_security_group.tf-web-sg.id
+    aws_security_group.web_sg.id
   ]
 
   tags = {
-    Name        = "${var.app_name}-Web-${count.index + 1}"
+    Name        = "${var.app_name}_web_${count.index + 1}"
     Environment = var.environment
   }
 }

@@ -1,6 +1,5 @@
-resource "aws_s3_bucket" "tf-s3" {
+resource "aws_s3_bucket" "elb_logs_s3" {
   bucket        = "${lower(var.app_name)}-elb-access-logs"
-  acl           = "private"
   force_destroy = true
 
   tags = {
@@ -9,8 +8,8 @@ resource "aws_s3_bucket" "tf-s3" {
   }
 }
 
-resource "aws_s3_bucket_policy" "tf-s3-policy" {
-  bucket = aws_s3_bucket.tf-s3.id
+resource "aws_s3_bucket_policy" "elb_logs_s3_policy" {
+  bucket = aws_s3_bucket.elb_logs_s3.id
 
   policy = <<POLICY
 {
@@ -22,7 +21,7 @@ resource "aws_s3_bucket_policy" "tf-s3-policy" {
         "AWS": "arn:aws:iam::${data.aws_elb_service_account.main.id}:root"
       },
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.tf-s3.bucket}/${var.elb_log_prefix.public}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.elb_logs_s3.bucket}/${var.elb_log_prefix.public}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
     },
     {
       "Effect": "Allow",
@@ -30,7 +29,7 @@ resource "aws_s3_bucket_policy" "tf-s3-policy" {
         "Service": "delivery.logs.amazonaws.com"
       },
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.tf-s3.bucket}/${var.elb_log_prefix.public}/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.elb_logs_s3.bucket}/${var.elb_log_prefix.public}/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
       "Condition": {
         "StringEquals": {
           "s3:x-amz-acl": "bucket-owner-full-control"
@@ -43,7 +42,7 @@ resource "aws_s3_bucket_policy" "tf-s3-policy" {
         "AWS": "arn:aws:iam::${data.aws_elb_service_account.main.id}:root"
       },
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.tf-s3.bucket}/${var.elb_log_prefix.private}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.elb_logs_s3.bucket}/${var.elb_log_prefix.private}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
     },
     {
       "Effect": "Allow",
@@ -51,7 +50,7 @@ resource "aws_s3_bucket_policy" "tf-s3-policy" {
         "Service": "delivery.logs.amazonaws.com"
       },
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.tf-s3.bucket}/${var.elb_log_prefix.private}/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.elb_logs_s3.bucket}/${var.elb_log_prefix.private}/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
       "Condition": {
         "StringEquals": {
           "s3:x-amz-acl": "bucket-owner-full-control"
@@ -64,7 +63,7 @@ resource "aws_s3_bucket_policy" "tf-s3-policy" {
         "Service": "delivery.logs.amazonaws.com"
       },
       "Action": "s3:GetBucketAcl",
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.tf-s3.bucket}"
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.elb_logs_s3.bucket}"
     }
   ]
 }

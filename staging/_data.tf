@@ -1,14 +1,9 @@
-data "aws_ami" "ubuntu2004lts" {
+data "aws_ami" "app_ami" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-*-arm64-server-*"]
   }
 
   owners = ["099720109477"] # Canonical

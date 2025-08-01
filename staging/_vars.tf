@@ -15,14 +15,14 @@ variable "aws_region" {
 
 variable "sizing" {
   type = object({
-    ec2_app = string
-    ec2_web = string
+    app_ec2 = string
+    web_ec2 = string
     rds_master = string
     rds_read = string
   })
   default = {
-    ec2_app = "t4g.nano"
-    ec2_web = "t4g.nano"
+    app_ec2 = "t4g.nano"
+    web_ec2 = "t4g.nano"
     rds_master = "t4g.micro"
     rds_read = "t4g.micro"
   }
