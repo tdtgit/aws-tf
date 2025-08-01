@@ -1,7 +1,7 @@
-resource "aws_security_group" "tf-elb-web-sg" {
-  name        = "${var.app_name}-SG-Web-ELB"
+resource "aws_security_group" "web_elb_sg" {
+  name        = "${var.app_name}-web-elb-sg"
   description = "Allow global inbound traffic"
-  vpc_id      = aws_vpc.tf_vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
     description = "HTTP"
@@ -34,64 +34,24 @@ resource "aws_security_group" "tf-elb-web-sg" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
     cidr_blocks = [
       "0.0.0.0/0"
     ]
   }
 
   tags = {
-    Name        = "${var.app_name}-SG-WEB-ELB"
+    Name        = "${var.app_name}-web-elb-sg"
     Environment = var.environment
   }
 }
 
-resource "aws_security_group" "tf-web-sg" {
-  name        = "${var.app_name}-SG-WEB"
+resource "aws_security_group" "web_sg" {
+  name        = "${var.app_name}-web-sg"
   description = "Allow ELB inbound traffic"
-  vpc_id      = aws_vpc.tf_vpc.id
-
-  ingress {
-    description     = "HTTP"
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [
-      aws_security_group.tf-elb-web-sg.id
-    ]
-  }
-
-  ingress {
-    description     = "HTTPs"
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
-    security_groups = [
-      aws_security_group.tf-elb-web-sg.id
-    ]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [
-      "0.0.0.0/0"
-    ]
-  }
-
-  tags = {
-    Name        = "${var.app_name}-SG-WEB"
-    Environment = var.environment
-  }
-}
-
-resource "aws_security_group" "tf-elb-app-sg" {
-  name        = "${var.app_name}-SG-APP-ELB"
-  description = "Allow inbound traffic from Web instances"
-  vpc_id      = aws_vpc.tf_vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
     description = "HTTP"
@@ -99,7 +59,7 @@ resource "aws_security_group" "tf-elb-app-sg" {
     to_port     = 80
     protocol    = "tcp"
     security_groups = [
-      aws_security_group.tf-web-sg.id
+      aws_security_group.web_elb_sg.id
     ]
   }
 
@@ -109,91 +69,131 @@ resource "aws_security_group" "tf-elb-app-sg" {
     to_port     = 443
     protocol    = "tcp"
     security_groups = [
-      aws_security_group.tf-web-sg.id
+      aws_security_group.web_elb_sg.id
     ]
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
     cidr_blocks = [
       "0.0.0.0/0"
     ]
   }
 
   tags = {
-    Name        = "${var.app_name}-SG-APP-ELB"
+    Name        = "${var.app_name}-web-sg"
     Environment = var.environment
   }
 }
 
-resource "aws_security_group" "tf-app-sg" {
-  name        = "${var.app_name}-SG-APP"
+resource "aws_security_group" "app_elb_sg" {
+  name        = "${var.app_name}-app-elb-sg"
   description = "Allow inbound traffic from Web instances"
-  vpc_id      = aws_vpc.tf_vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
-    description     = "HTTP"
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     security_groups = [
-      aws_security_group.tf-elb-app-sg.id
+      aws_security_group.web_sg.id
     ]
   }
 
   ingress {
-    description     = "HTTPs"
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
+    description = "HTTPs"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     security_groups = [
-      aws_security_group.tf-elb-app-sg.id
+      aws_security_group.web_sg.id
     ]
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
     cidr_blocks = [
       "0.0.0.0/0"
     ]
   }
 
   tags = {
-    Name        = "${var.app_name}-SG-APP"
+    Name        = "${var.app_name}-app-elb-sg"
     Environment = var.environment
   }
 }
 
-resource "aws_security_group" "tf-db-sg" {
-  name        = "${var.app_name}-SG-DB"
-  description = "Allow traffic from APP"
-  vpc_id      = aws_vpc.tf_vpc.id
+resource "aws_security_group" "app_sg" {
+  name        = "${var.app_name}-app-sg"
+  description = "Allow inbound traffic from Web instances"
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
-    description     = "MySQL"
-    from_port       = 3306
-    to_port         = 3306
-    protocol        = "tcp"
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     security_groups = [
-      aws_security_group.tf-app-sg.id
+      aws_security_group.app_elb_sg.id
+    ]
+  }
+
+  ingress {
+    description = "HTTPs"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    security_groups = [
+      aws_security_group.app_elb_sg.id
     ]
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
     cidr_blocks = [
       "0.0.0.0/0"
     ]
   }
 
   tags = {
-    Name        = "${var.app_name}-SG-DB"
+    Name        = "${var.app_name}-app-sg"
+    Environment = var.environment
+  }
+}
+
+resource "aws_security_group" "db_sg" {
+  name        = "${var.app_name}-db-sg"
+  description = "Allow traffic from APP"
+  vpc_id      = aws_vpc.main_vpc.id
+
+  ingress {
+    description = "MySQL"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    security_groups = [
+      aws_security_group.app_sg.id
+    ]
+  }
+
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+  }
+
+  tags = {
+    Name        = "${var.app_name}-db-sg"
     Environment = var.environment
   }
 }
