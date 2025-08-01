@@ -3,10 +3,10 @@ resource "aws_lb" "app_elb" {
   name               = "${var.app_name}-app-elb"
   internal           = true
   load_balancer_type = "application"
-  security_groups    = [
+  security_groups = [
     aws_security_group.app_elb_sg.id
   ]
-  subnets            = [
+  subnets = [
     aws_subnet.app_1a.id,
     aws_subnet.app_1b.id
   ]
@@ -58,10 +58,10 @@ resource "aws_lb" "web_elb" {
   name               = "${var.app_name}-web-elb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [
+  security_groups = [
     aws_security_group.web_elb_sg.id
   ]
-  subnets            = [
+  subnets = [
     aws_subnet.web_1a.id,
     aws_subnet.web_1b.id
   ]
